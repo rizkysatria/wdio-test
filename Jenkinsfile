@@ -36,6 +36,12 @@ pipeline {
             }
         }
 
+        stage('Debug Report Files') {
+            steps {
+                sh 'ls -R reports'
+            }
+        }
+
         stage('Generate HTML Report') {
             steps {
                 sh 'node scripts/generate-report.js'
