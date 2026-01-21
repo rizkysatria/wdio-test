@@ -16,6 +16,15 @@ export const config: WebdriverIO.Config = {
     timeout: 60000
   },
 
+  reporters: [
+    'spec',
+    ['cucumberjs-json', {
+      jsonFolder: 'reports/json',
+      language: 'en'
+    }]
+  ],
+
+
   /**
    * MOBILE SETUP
    */

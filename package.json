@@ -20,6 +20,8 @@
     "@wdio/spec-reporter": "^9.23.2",
     "appium": "^2.19.0",
     "appium-uiautomator2-driver": "^4.2.9",
-    "expect-webdriverio": "^5.5.0"
+    "cucumber-html-reporter": "^7.2.0",
+    "expect-webdriverio": "^5.5.0",
+    "wdio-cucumberjs-json-reporter": "^6.0.1"
   }
 }

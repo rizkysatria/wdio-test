@@ -35,14 +35,30 @@ pipeline {
                 '''
             }
         }
+
+        stage('Generate HTML Report') {
+            steps {
+                sh 'node scripts/generate-report.js'
+            }
+        }
     }
 
     post {
         always {
-            echo 'Automation pipeline finished'
+            archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
 
-            // kalau nanti ada report folder
-            archiveArtifacts artifacts: '**/reports/**', allowEmptyArchive: true
+            emailext(
+                subject: "Automation Result - ${currentBuild.currentResult}",
+                body: """
+                    <p>Result: <b>${currentBuild.currentResult}</b></p>
+                    <p>Job: ${JOB_NAME}</p>
+                    <p>Build: #${BUILD_NUMBER}</p>
+                    <p>HTML report attached.</p>
+                """,
+                mimeType: 'text/html',
+                attachmentsPattern: 'reports/html/*.html',
+                to: 'rizkysatrian@gmail.com'
+            )
         }
 
         success {
