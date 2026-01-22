@@ -47,40 +47,58 @@ pipeline {
                 sh 'node scripts/generate-report.js'
             }
         }
+
+        stage('Zip HTML Report') {
+            steps {
+                sh '''
+                cd reports
+                zip -r cucumber-report.zip html
+                '''
+            }
+        }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
-            mail(
-                        to: 'rizkysatrian@gmail.com',
-                        subject: "Automation Result - ${currentBuild.currentResult}",
-                        body: """
-                        Job       : ${env.JOB_NAME}
-                        Build     : #${env.BUILD_NUMBER}
-                        Status    : ${currentBuild.currentResult}
+            // publishHTML([
+            //     reportDir: 'reports/html',
+            //     reportFiles: 'cucumber-report.html',
+            //     reportName: 'Cucumber Automation Report',
+            //     keepAll: true,
+            //     alwaysLinkToLastBuild: true,
+            //     allowMissing: false
+            // ])
+            // mail(
+            //             to: 'rizkysatrian@gmail.com',
+            //             subject: "Automation Result - ${currentBuild.currentResult}",
+            //             body: """
+            //             Job       : ${env.JOB_NAME}
+            //             Build     : #${env.BUILD_NUMBER}
+            //             Status    : ${currentBuild.currentResult}
 
-                        Report:
-                        ${env.BUILD_URL}artifact/reports/html/
-                        """
-            )
-
-            // emailext(
-            //     mimeType: 'text/html',
-            //     subject: "Automation Result - ${currentBuild.currentResult}",
-            //     body: """
-            //     <p>Job: ${env.JOB_NAME}</p>
-            //     <p>Build: #${env.BUILD_NUMBER}</p>
-            //     <p>Status: <b>${currentBuild.currentResult}</b></p>
-            //     <p>HTML report attached.</p>
-            //     """,
-            //     to: 'rizkysatrian@gmail.com',
-            //     attachmentsPattern: 'reports/html/*.html',
-            //     recipientProviders: []
+            //             Report:
+            //             ${env.BUILD_URL}artifact/reports/html/
+            //             """
             // )
 
+            emailext(
+                subject: "Automation Result - ${currentBuild.currentResult}",
+                body: """
+            Hi,
 
+            Automation sudah selesai.
 
+            Job   : ${env.JOB_NAME}
+            Build : #${env.BUILD_NUMBER}
+            Status: ${currentBuild.currentResult}
+
+            Silakan download & unzip report HTML terlampir.
+            """,
+                to: 'rizkysatrian@gmail.com',
+                from: 'Jenkins CI <rizkysatrian@gmail.com>',
+                attachmentsPattern: 'reports/cucumber-report.zip',
+                recipientProviders: []
+            )
         }
 
         success {
