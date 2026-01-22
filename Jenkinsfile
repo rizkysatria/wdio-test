@@ -74,27 +74,33 @@ pipeline {
             //     alwaysLinkToLastBuild: true,
             //     allowMissing: false
             // ])
-            emai(
-            to: 'rudiismainto687@gmail.com',
-            subject: "[Jenkins] ${JOB_NAME} #${BUILD_NUMBER} - ${currentBuild.currentResult}",
-            mimeType: 'text/html',
-            body: """
-                <h2>Automation Test Result</h2>
+            archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
+            mail(
+  to: 'rizkysatrian@gmail.com',
+  subject: 'Jenkins Email Test',
+  body: 'Hello from Jenkins (mail step)'
+)
+            // emai(
+            // to: 'rudiismainto687@gmail.com',
+            // subject: "[Jenkins] ${JOB_NAME} #${BUILD_NUMBER} - ${currentBuild.currentResult}",
+            // mimeType: 'text/html',
+            // body: """
+            //     <h2>Automation Test Result</h2>
 
-                <p><b>Job:</b> ${JOB_NAME}</p>
-                <p><b>Build:</b> #${BUILD_NUMBER}</p>
-                <p><b>Status:</b> ${currentBuild.currentResult}</p>
+            //     <p><b>Job:</b> ${JOB_NAME}</p>
+            //     <p><b>Build:</b> #${BUILD_NUMBER}</p>
+            //     <p><b>Status:</b> ${currentBuild.currentResult}</p>
 
-                <p>
-                    👉 <a href="${BUILD_URL}artifact/reports/html/cucumber-report.html">
-                        Open Test Report
-                    </a>
-                </p>
+            //     <p>
+            //         👉 <a href="${BUILD_URL}artifact/reports/html/cucumber-report.html">
+            //             Open Test Report
+            //         </a>
+            //     </p>
 
-                <br/>
-                <small>Triggered by Jenkins</small>
-            """
-        )
+            //     <br/>
+            //     <small>Triggered by Jenkins</small>
+            // """
+        // )
             // archiveArtifacts artifacts: 'reports/cucumber-report.zip'
             // emailext(
             //     subject: "Automation Result - ${currentBuild.currentResult}",
