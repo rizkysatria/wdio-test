@@ -54,18 +54,31 @@ pipeline {
             }
         }
 
-        stage('Zip HTML Report') {
-            steps {
-                sh '''
-                cd reports
-                zip -r cucumber-report.zip html
-                '''
-            }
-        }
+        // stage('Zip HTML Report') {
+        //     steps {
+        //         sh '''
+        //         cd reports
+        //         zip -r cucumber-report.zip html
+        //         '''
+        //     }
+        // }
     }
 
     post {
         always {
+            sh '''
+      rm -rf gh-pages
+      git clone -b gh-pages https://github.com/username/automation-wdio.git gh-pages || true
+      mkdir -p gh-pages/report
+      cp -r reports/html/* gh-pages/report/
+      cd gh-pages
+      git add .
+      git commit -m "Update report #${BUILD_NUMBER}" || true
+      git push origin gh-pages
+    '''
+                
+
+
             publishHTML([
                 reportDir: 'reports/html',
                 reportFiles: 'cucumber-report.html',
@@ -87,7 +100,7 @@ pipeline {
     <p><b>Status:</b> ${currentBuild.currentResult}</p>
 
     <p>
-      👉 <a href="${BUILD_URL}Cucumber_20Automation_20Report/">
+      👉 <a href="https://rizkysatria.github.io/automation-wdio/report/cucumber-report.html">
         Open Cucumber HTML Report
       </a>
     </p>
