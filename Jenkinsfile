@@ -28,6 +28,12 @@ pipeline {
             }
         }
 
+        stage('Clean reports') {
+            steps {
+                sh 'rm -rf reports'
+            }
+        }
+
         stage('Run WDIO Tests') {
             steps {
                 sh '''
