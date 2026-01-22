@@ -60,14 +60,14 @@ pipeline {
 
     post {
         always {
-            // publishHTML([
-            //     reportDir: 'reports/html',
-            //     reportFiles: 'cucumber-report.html',
-            //     reportName: 'Cucumber Automation Report',
-            //     keepAll: true,
-            //     alwaysLinkToLastBuild: true,
-            //     allowMissing: false
-            // ])
+            publishHTML([
+                reportDir: 'reports/html',
+                reportFiles: 'cucumber-report.html',
+                reportName: 'Cucumber Automation Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: false
+            ])
             // mail(
             //             to: 'rizkysatrian@gmail.com',
             //             subject: "Automation Result - ${currentBuild.currentResult}",
@@ -80,7 +80,7 @@ pipeline {
             //             ${env.BUILD_URL}artifact/reports/html/
             //             """
             // )
-
+            archiveArtifacts artifacts: 'reports/cucumber-report.zip'
             emailext(
                 subject: "Automation Result - ${currentBuild.currentResult}",
                 body: """
@@ -95,7 +95,6 @@ pipeline {
             Silakan download & unzip report HTML terlampir.
             """,
                 to: 'rizkysatrian@gmail.com',
-                from: 'Jenkins CI <rizkysatrian@gmail.com>',
                 attachmentsPattern: 'reports/cucumber-report.zip',
                 recipientProviders: []
             )
