@@ -53,28 +53,19 @@ pipeline {
         always {
             archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
 
-            // emailext(
-            //     subject: "Automation Result - ${currentBuild.currentResult}",
-            //     body: """
-            //         <p>Result: <b>${currentBuild.currentResult}</b></p>
-            //         <p>Job: ${JOB_NAME}</p>
-            //         <p>Build: #${BUILD_NUMBER}</p>
-            //         <p>HTML report attached.</p>
-            //     """,
-            //     mimeType: 'text/html',
-            //     attachmentsPattern: 'reports/html/*.html',  
-            //     from: 'Jenkins CI <rizkysatrian@gmail.com>',
-            //     to: 'rizkysatrian@gmail.com'
-            // )
-
-            emailext(
-                mimeType: 'text/plain',
-                subject: 'Jenkins SMTP Final Test',
-                body: 'Hello from Jenkins',
-                from: 'Jenkins CI <rizkysatrian@gmail.com>',
-                to: 'rizkysatrian@gmail.com',
-                recipientProviders: []
+            mail(
+                subject: "Automation Result - ${currentBuild.currentResult}",
+                body: """
+                    <p>Result: <b>${currentBuild.currentResult}</b></p>
+                    <p>Job: ${JOB_NAME}</p>
+                    <p>Build: #${BUILD_NUMBER}</p>
+                    <p>HTML report attached.</p>
+                """,
+                mimeType: 'text/html',
+                attachmentsPattern: 'reports/html/*.html',  
+                to: 'rizkysatrian@gmail.com'
             )
+
 
         }
 
