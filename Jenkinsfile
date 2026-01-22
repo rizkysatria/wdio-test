@@ -62,7 +62,8 @@ pipeline {
                     <p>HTML report attached.</p>
                 """,
                 mimeType: 'text/html',
-                attachmentsPattern: 'reports/html/*.html',
+                attachmentsPattern: 'reports/html/*.html',  
+                from: 'Jenkins CI <rizkysatrian@gmail.com>',
                 to: 'rizkysatrian@gmail.com'
             )
         }
