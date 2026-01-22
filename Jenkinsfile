@@ -51,19 +51,31 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
+            // archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
+            // mail(
+            //     subject: "Automation Result - ${currentBuild.currentResult}",
+            //     body: """
+            //         <p>Result: <b>${currentBuild.currentResult}</b></p>
+            //         <p>Job: ${JOB_NAME}</p>
+            //         <p>Build: #${BUILD_NUMBER}</p>
+            //         <p>HTML report attached.</p>
+            //     """,
+            //     mimeType: 'text/html',
+            //     attachmentsPattern: 'reports/html/*.html',  
+            //     to: 'rizkysatrian@gmail.com'
+            // )
 
             mail(
+                to: 'rizkysatrian@gmail.com',
                 subject: "Automation Result - ${currentBuild.currentResult}",
                 body: """
-                    <p>Result: <b>${currentBuild.currentResult}</b></p>
-                    <p>Job: ${JOB_NAME}</p>
-                    <p>Build: #${BUILD_NUMBER}</p>
-                    <p>HTML report attached.</p>
-                """,
-                mimeType: 'text/html',
-                attachmentsPattern: 'reports/html/*.html',  
-                to: 'rizkysatrian@gmail.com'
+            Job: ${env.JOB_NAME}
+            Build: #${env.BUILD_NUMBER}
+            Status: ${currentBuild.currentResult}
+
+            HTML report attached.
+            """,
+                attachmentsPattern: 'reports/html/*.html'
             )
 
 
