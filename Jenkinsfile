@@ -76,10 +76,26 @@ pipeline {
             // ])
             archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
             mail(
-  to: 'rizkysatrian@gmail.com',
-  subject: 'Jenkins Email Test',
-  body: 'Hello from Jenkins (mail step)'
-)
+                to: 'rizkysatrian@gmail.com,rudiismainto777@gmail.com',
+                subject: "Jenkins Report - ${JOB_NAME} #${BUILD_NUMBER}",
+                body: """
+                <h2>Automation Test Result</h2>
+
+                <p><b>Job:</b> ${JOB_NAME}</p>
+                <p><b>Build:</b> #${BUILD_NUMBER}</p>
+                <p><b>Status:</b> ${currentBuild.currentResult}</p>
+
+                <p>
+                    👉 <a href="${BUILD_URL}artifact/reports/html/">
+                    Open Cucumber HTML Report
+                    </a>
+                </p>
+
+                <br/>
+                <small>Triggered by Jenkins</small>
+                """,
+                mimeType: 'text/html'
+            )
             // emai(
             // to: 'rudiismainto687@gmail.com',
             // subject: "[Jenkins] ${JOB_NAME} #${BUILD_NUMBER} - ${currentBuild.currentResult}",
