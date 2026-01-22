@@ -66,36 +66,37 @@ pipeline {
 
     post {
         always {
-            // publishHTML([
-            //     reportDir: 'reports/html',
-            //     reportFiles: 'cucumber-report.html',
-            //     reportName: 'Cucumber Automation Report',
-            //     keepAll: true,
-            //     alwaysLinkToLastBuild: true,
-            //     allowMissing: false
-            // ])
+            publishHTML([
+                reportDir: 'reports/html',
+                reportFiles: 'cucumber-report.html',
+                reportName: 'Cucumber Automation Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: false
+            ])
             archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
             mail(
-                to: 'rizkysatrian@gmail.com,rudiismainto777@gmail.com',
-                subject: "Jenkins Report - ${JOB_NAME} #${BUILD_NUMBER}",
-                body: """
-                <h2>Automation Test Result</h2>
+  to: 'rizkysatrian@gmail.com,rudiismanto687@gmail.com',
+  subject: "Jenkins Report - ${JOB_NAME} #${BUILD_NUMBER}",
+  mimeType: 'text/html',
+  body: """
+    <h2>Automation Test Result</h2>
 
-                <p><b>Job:</b> ${JOB_NAME}</p>
-                <p><b>Build:</b> #${BUILD_NUMBER}</p>
-                <p><b>Status:</b> ${currentBuild.currentResult}</p>
+    <p><b>Job:</b> ${JOB_NAME}</p>
+    <p><b>Build:</b> #${BUILD_NUMBER}</p>
+    <p><b>Status:</b> ${currentBuild.currentResult}</p>
 
-                <p>
-                    👉 <a href="${BUILD_URL}artifact/reports/html/">
-                    Open Cucumber HTML Report
-                    </a>
-                </p>
+    <p>
+      👉 <a href="${BUILD_URL}Cucumber_20Automation_20Report/">
+        Open Cucumber HTML Report
+      </a>
+    </p>
 
-                <br/>
-                <small>Triggered by Jenkins</small>
-                """,
-                mimeType: 'text/html'
-            )
+    <br/>
+    <small>Triggered by Jenkins</small>
+  """
+)
+
             // emai(
             // to: 'rudiismainto687@gmail.com',
             // subject: "[Jenkins] ${JOB_NAME} #${BUILD_NUMBER} - ${currentBuild.currentResult}",
