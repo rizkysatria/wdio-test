@@ -65,18 +65,20 @@ pipeline {
             //     to: 'rizkysatrian@gmail.com'
             // )
 
-            mail(
-                to: 'rizkysatrian@gmail.com',
+            emailext(
+                mimeType: 'text/html',
                 subject: "Automation Result - ${currentBuild.currentResult}",
                 body: """
-            Job: ${env.JOB_NAME}
-            Build: #${env.BUILD_NUMBER}
-            Status: ${currentBuild.currentResult}
-
-            HTML report attached.
-            """,
-                attachmentsPattern: 'reports/html/*.html'
+                <p>Job: ${env.JOB_NAME}</p>
+                <p>Build: #${env.BUILD_NUMBER}</p>
+                <p>Status: <b>${currentBuild.currentResult}</b></p>
+                <p>HTML report attached.</p>
+                """,
+                to: 'rizkysatrian@gmail.com',
+                attachmentsPattern: 'reports/html/*.html',
+                recipientProviders: []
             )
+
 
 
         }
