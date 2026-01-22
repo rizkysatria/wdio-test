@@ -66,16 +66,16 @@ pipeline {
 
     post {
         always {
-            publishHTML([
-                reportDir: 'reports/html',
-                reportFiles: 'cucumber-report.html',
-                reportName: 'Cucumber Automation Report',
-                keepAll: true,
-                alwaysLinkToLastBuild: true,
-                allowMissing: false
-            ])
-            emailext(
-            to: 'rudiismainto777@gmail.com',
+            // publishHTML([
+            //     reportDir: 'reports/html',
+            //     reportFiles: 'cucumber-report.html',
+            //     reportName: 'Cucumber Automation Report',
+            //     keepAll: true,
+            //     alwaysLinkToLastBuild: true,
+            //     allowMissing: false
+            // ])
+            emai(
+            to: 'rudiismainto687@gmail.com',
             subject: "[Jenkins] ${JOB_NAME} #${BUILD_NUMBER} - ${currentBuild.currentResult}",
             mimeType: 'text/html',
             body: """
