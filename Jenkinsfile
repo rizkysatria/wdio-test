@@ -74,36 +74,45 @@ pipeline {
                 alwaysLinkToLastBuild: true,
                 allowMissing: false
             ])
-            // mail(
-            //             to: 'rizkysatrian@gmail.com',
-            //             subject: "Automation Result - ${currentBuild.currentResult}",
-            //             body: """
-            //             Job       : ${env.JOB_NAME}
-            //             Build     : #${env.BUILD_NUMBER}
-            //             Status    : ${currentBuild.currentResult}
-
-            //             Report:
-            //             ${env.BUILD_URL}artifact/reports/html/
-            //             """
-            // )
-            archiveArtifacts artifacts: 'reports/cucumber-report.zip'
             emailext(
-                subject: "Automation Result - ${currentBuild.currentResult}",
-                body: """
-            Hi,
+            to: 'rudiismainto777@gmail.com',
+            subject: "[Jenkins] ${JOB_NAME} #${BUILD_NUMBER} - ${currentBuild.currentResult}",
+            mimeType: 'text/html',
+            body: """
+                <h2>Automation Test Result</h2>
 
-            Automation sudah selesai.
+                <p><b>Job:</b> ${JOB_NAME}</p>
+                <p><b>Build:</b> #${BUILD_NUMBER}</p>
+                <p><b>Status:</b> ${currentBuild.currentResult}</p>
 
-            Job   : ${env.JOB_NAME}
-            Build : #${env.BUILD_NUMBER}
-            Status: ${currentBuild.currentResult}
+                <p>
+                    👉 <a href="${BUILD_URL}artifact/reports/html/cucumber-report.html">
+                        Open Test Report
+                    </a>
+                </p>
 
-            Silakan download & unzip report HTML terlampir.
-            """,
-                to: 'rizkysatrian@gmail.com',
-                attachmentsPattern: 'reports/cucumber-report.zip',
-                recipientProviders: []
-            )
+                <br/>
+                <small>Triggered by Jenkins</small>
+            """
+        )
+            // archiveArtifacts artifacts: 'reports/cucumber-report.zip'
+            // emailext(
+            //     subject: "Automation Result - ${currentBuild.currentResult}",
+            //     body: """
+            // Hi,
+
+            // Automation sudah selesai.
+
+            // Job   : ${env.JOB_NAME}
+            // Build : #${env.BUILD_NUMBER}
+            // Status: ${currentBuild.currentResult}
+
+            // Silakan download & unzip report HTML terlampir.
+            // """,
+            //     to: 'rizkysatrian@gmail.com',
+            //     attachmentsPattern: 'reports/cucumber-report.zip',
+            //     recipientProviders: []
+            // )
         }
 
         success {
