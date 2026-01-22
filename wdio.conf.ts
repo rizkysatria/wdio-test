@@ -16,6 +16,24 @@ export const config: WebdriverIO.Config = {
     timeout: 60000
   },
 
+  reporters: [
+    'spec',
+    ['allure', {
+      outputDir: 'allure-results',
+      disableWebdriverStepsReporting: false,
+      disableWebdriverScreenshotsReporting: false,
+    }]
+  ],
+
+  /**
+   * SCREENSHOT AUTO SAAT FAIL (OPTIONAL TAPI DISARANKAN)
+   */
+  afterStep: async function (_step, _scenario, { error }) {
+    if (error) {
+      await browser.takeScreenshot()
+    }
+  },
+
   /**
    * MOBILE SETUP
    */

@@ -12,6 +12,7 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^25.0.9",
+    "@wdio/allure-reporter": "^9.23.2",
     "@wdio/appium-service": "^9.23.2",
     "@wdio/cli": "^9.23.2",
     "@wdio/cucumber-framework": "^9.23.2",
