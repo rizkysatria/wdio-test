@@ -61,7 +61,7 @@ pipeline {
         stage('Deploy to Netlify') {
             environment {
                 NETLIFY_AUTH_TOKEN = credentials('NETLIFY_AUTH_TOKEN')
-                NETLIFY_SITE_ID = 'PASTE_SITE_ID_LU_DISINI'
+                NETLIFY_SITE_ID = '5d3cffd9-8aec-442d-9167-9642705d9354'
             }
             steps {
                 sh '''
