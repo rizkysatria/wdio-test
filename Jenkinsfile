@@ -89,18 +89,20 @@ pipeline {
                 allowMissing: false
             ])
             archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
-            def emailBody = readFile('email/report-email.html')
+            script {
+                def emailBody = readFile('email/report-email.html')
                 .replace('${JOB_NAME}', env.JOB_NAME)
                 .replace('${BUILD_NUMBER}', env.BUILD_NUMBER)
                 .replace('${BUILD_TIME}', new Date().toString())
                 .replace('${REPORT_URL}', 'https://tester542.netlify.app')
 
-            mail(
-                to: 'rizkysatrian@gmail.com,rudiismanto687@gmail.com',
-                subject: "Automation Report - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                mimeType: 'text/html',
-                body: emailBody
-            )
+                mail(
+                    to: 'rizkysatrian@gmail.com,rudiismanto687@gmail.com',
+                    subject: "Automation Report - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    mimeType: 'text/html',
+                    body: emailBody
+                )
+            }
         }
 
         success {
