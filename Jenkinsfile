@@ -97,7 +97,7 @@ pipeline {
                 .replace('${REPORT_URL}', 'https://tester542.netlify.app')
 
                 mail(
-                    to: 'rizkysatrian@gmail.com,rudiismanto687@gmail.com',
+                    to: 'rizkysatrian@gmail.com',
                     subject: "Automation Report - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     mimeType: 'text/html',
                     body: emailBody
