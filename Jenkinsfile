@@ -51,16 +51,31 @@ pipeline {
         stage('Prepare Netlify Report') {
             steps {
                 sh '''
+                rm -rf netlify
                 mkdir -p netlify
                 cp reports/html/cucumber-report.html netlify/index.html
                 '''
             }
         }
 
+        stage('Deploy to Netlify') {
+            environment {
+                NETLIFY_AUTH_TOKEN = credentials('NETLIFY_AUTH_TOKEN')
+                NETLIFY_SITE_ID = 'PASTE_SITE_ID_LU_DISINI'
+            }
+            steps {
+                sh '''
+                npm install -g netlify-cli
+                netlify deploy \
+                    --dir=netlify \
+                    --site=$NETLIFY_SITE_ID \
+                    --auth=$NETLIFY_AUTH_TOKEN \
+                    --prod
+                '''
+            }
+        }
 
-  }
-
-
+        
     }
 
     post {
@@ -75,21 +90,19 @@ pipeline {
             ])
             archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
             mail(
-  to: 'rizkysatrian@gmail.com,rudiismanto687@gmail.com',
-  subject: "Jenkins Report - ${JOB_NAME} #${BUILD_NUMBER}",
-  mimeType: 'text/html',
-  body: """
-    <h2>Automation Test Result</h2>
-    <p><b>Status:</b> ${currentBuild.currentResult}</p>
-
-    <p>
-      👉 <a href="https://your-site.netlify.app">
-        Open Cucumber Automation Report
-      </a>
-    </p>
-  """
-)
-
+            to: 'rizkysatrian@gmail.com',
+            subject: "Automation Report - ${JOB_NAME} #${BUILD_NUMBER}",
+            mimeType: 'text/html',
+            body: """
+                <h2>Automation Test Result</h2>
+                <p>Status: <b>${currentBuild.currentResult}</b></p>
+                <p>
+                👉 <a href="https://effortless-cookies-7c1c30.netlify.app" target="_blank">
+                    Open HTML Report
+                </a>
+                </p>
+            """
+            )
         }
 
         success {
