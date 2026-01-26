@@ -89,21 +89,18 @@ pipeline {
                 allowMissing: false
             ])
             archiveArtifacts artifacts: 'reports/html/*.html', allowEmptyArchive: true
-            script {
-                def statusColor = (status == 'SUCCESS') ? '#27ae60' : '#e74c3c'
+            def emailBody = readFile('email/report-email.html')
+                .replace('${JOB_NAME}', env.JOB_NAME)
+                .replace('${BUILD_NUMBER}', env.BUILD_NUMBER)
+                .replace('${BUILD_TIME}', new Date().toString())
+                .replace('${REPORT_URL}', 'https://tester542.netlify.app')
 
-                def emailBody = readFile('email/report-email.html')
-                    .replace('${BUILD_STATUS}', currentBuild.currentResult)
-                    .replace('${REPORT_URL}', 'https://tester542.netlify.app/')
-                    .replace('__STATUS_COLOR__', statusColor)
-
-                mail(
-                    to: 'rizkysatrian@gmail.com,rudiismanto687@gmail.com',
-                    subject: "Automation Report - ${JOB_NAME} #${BUILD_NUMBER}",
-                    mimeType: 'text/html',
-                    body: emailBody
-                )
-            }
+            mail(
+                to: 'rizkysatrian@gmail.com,rudiismanto687@gmail.com',
+                subject: "Automation Report - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                mimeType: 'text/html',
+                body: emailBody
+            )
         }
 
         success {
