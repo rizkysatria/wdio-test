@@ -1,4 +1,4 @@
-@Checkout
+@SmokeTest @Checkout
 Feature: Checkout
 
         Scenario: checkout dari product list

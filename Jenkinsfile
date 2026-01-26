@@ -10,7 +10,33 @@ pipeline {
         NODE_ENV = 'test'
     }
 
+    parameters {
+        string(
+            name: 'TEST_TAGS',
+            defaultValue: '',
+            description: 'WAJIB isi test tags (contoh: @smoke, @login and not @wip)'
+        )
+    }
+
     stages {
+
+        stage('Validate Parameters') {
+            steps {
+                script {
+                if (!params.TEST_TAGS?.trim()) {
+                    error("""
+            ❌ TEST_TAGS tidak boleh kosong!
+
+            Contoh valid:
+            - @smoke
+            - @login
+            - @smoke and not @wip
+            - @regression or @critical
+                    """)
+                }
+                }
+            }
+        }
 
         stage('Checkout') {
             steps {
@@ -36,9 +62,11 @@ pipeline {
 
         stage('Run WDIO Tests') {
             steps {
-                sh '''
-                    npx wdio run wdio.conf.ts
-                '''
+                sh """
+                echo "Running tests with tags: ${params.TEST_TAGS}"
+                npx wdio run wdio.conf.ts \
+                    --cucumberOpts.tagExpression="${params.TEST_TAGS}"
+                """
             }
         }
 
@@ -48,23 +76,17 @@ pipeline {
             }
         }
 
-        stage('Prepare Netlify Report') {
+        stage('Prepare and Deploy Netlify Report') {
+            environment {
+                NETLIFY_AUTH_TOKEN = credentials('NETLIFY_AUTH_TOKEN')
+                NETLIFY_SITE_ID = '5d3cffd9-8aec-442d-9167-9642705d9354'
+            }
+
             steps {
                 sh '''
                 rm -rf netlify
                 mkdir -p netlify
                 cp reports/html/cucumber-report.html netlify/index.html
-                '''
-            }
-        }
-
-        stage('Deploy to Netlify') {
-            environment {
-                NETLIFY_AUTH_TOKEN = credentials('NETLIFY_AUTH_TOKEN')
-                NETLIFY_SITE_ID = '5d3cffd9-8aec-442d-9167-9642705d9354'
-            }
-            steps {
-                sh '''
                 npm install -g netlify-cli
                 netlify deploy \
                     --dir=netlify \
@@ -74,7 +96,6 @@ pipeline {
                 '''
             }
         }
-
         
     }
 

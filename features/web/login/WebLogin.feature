@@ -1,4 +1,4 @@
-@Login
+@SmokeTest @Login
 Feature: Login ke web
 
         Scenario: Login  berhasil
